@@ -9,6 +9,8 @@ The goal of this project is to eventually make a fully automatic half scale pins
 
 There is a mechanical aspect of 3D modeling parts that can be printed and will not only work but also be durable enough to hold the pins. In addition, there are two programming aspects: an Arduino, which runs the motors and reads any sensors from the machine, and a scoring component made in Java. While I am currently testing the Java component on my laptop, I will eventually run this on a Raspberry Pi or another low-powered device. I plan to release the Java scoring for other small scale bowlers once I have a more stable and feature-packed software.
 
+Since I am uploading this after I have already been working on the project for several months, I have multiple different revisions stored as separate files, especially for the 3D printed parts. 
+
 -Adam Walker
 adamwalker567123@gmail.com
 Las Vegas, NV
