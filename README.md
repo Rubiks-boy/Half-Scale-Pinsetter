@@ -11,6 +11,8 @@ There is a mechanical aspect of 3D modeling parts that can be printed and will n
 
 Since I am uploading this after I have already been working on the project for several months, I have multiple different revisions stored as separate files, especially for the 3D printed parts. 
 
+I have been working on this project in some form ever since I was four; I began 3D modeling my first parts in Jan. 2016 and have been more serious about the project starting in March 2017. This project is still very much a work in progress.
+
 -Adam Walker
 adamwalker567123@gmail.com
 Las Vegas, NV
