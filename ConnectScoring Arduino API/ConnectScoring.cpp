@@ -32,8 +32,6 @@ char ConnectScoring::genHash(String cmd)
 	{
 		totalAscii += ((int)cmd.charAt(i) * (i+1));
 	}//end for
-	//Serial.print("Totascii:");
-	//Serial.println(totalAscii);
 	return (char)(totalAscii % HASH_PRIME + FIRST_HASH);
 }//end genHash()
 
@@ -42,6 +40,7 @@ char ConnectScoring::genHash(String cmd)
 void ConnectScoring::sendCmd(String cmd)
 {
 	Serial.println(BEG + cmd + genHash(cmd) + TERMINATOR); 
+	lastCmd = cmd;
 }//end sendCmd()
 
 //Resends the last command.
@@ -63,34 +62,7 @@ void ConnectScoring::sendScore(boolean pins[])
 	}
 
 	sendCmd(cmd);
-	
-	////MAKE THING THAT WAITS FOR COMMAND
 }//end sendScore()
-
-//Clears previous commands, sends score, and returns what cycle to do next.
-//0: Reset, 1: Respot, 2: Gutter
-int ConnectScoring::sendScoreCycle(boolean pins[])
-{
-	Serial.flush();
-	
-	sendScore(pins);
-	
-	String cmd;
-	for(int i = 0; i < 50; i++)
-	{
-		cmd = readSerial();
-		if(cmd != "")
-			break;
-		delay(10);
-	}
-	
-	if(isRealCmd(cmd))
-	{
-		if(cmd.charAt(TYPE_LOC) == 'C')
-			return cmd.charAt(ARG_LOC);
-	}
-	else doResend();
-}
 
 //Used command sent from scoring was unsuccessful; asks for a resend.
 void ConnectScoring::doResend() //S
@@ -131,6 +103,20 @@ String ConnectScoring::readSerial()
 	return "";
 }
 
+String ConnectScoring::readSerialUntilCommandReceived()
+{
+	for(int i = 0; i < 10; i++)
+	{
+		String read = readSerial();
+		
+		if(read != "")
+			return read;
+		else
+			delay(5);
+	}
+	return "";
+}
+
 //Generates a random number of pins knocked down and tests sending score.
 void ConnectScoring::genTestScoring()
 {
@@ -148,19 +134,21 @@ void ConnectScoring::genTestScoring()
 	sendScore(pins);
 }
 
-//Generates a random number of pins knocked down and tests sending score with cycle output.
-int ConnectScoring::genTestScoringCycle()
+//sends the arduino a command '1' and sees whether it gets something back
+boolean ConnectScoring::isConnected()
 {
-	boolean pins[10];
-	int score = random(10);
-	int i = 0;
-	for(i = 0; i < score; i++)
+	Serial.flush();
+	sendCmd("1");
+	
+	String cmd = readSerialUntilCommandReceived();
+	
+	if(cmd == "")
+		return false;
+	
+	if(isRealCmd(cmd))
 	{
-		pins[i] = true;
+		if(cmd.charAt(TYPE_LOC) == '1')
+			return true;
 	}
-    for(i = score; i < 10; i++)
-    {
-		pins[i] = false; 
-    }
-	return sendScoreCycle(pins);
+	else return false;
 }

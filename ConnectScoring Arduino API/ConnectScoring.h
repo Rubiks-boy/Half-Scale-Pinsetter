@@ -18,9 +18,9 @@ const int HASH_LOC = 2;
 const char FIRST_HASH = '!';
 const char LAST_HASH = '|';
 const int NUM_PINS = 10;
-const int NUM_CMDS = 9;
-const char CMD_CODES[9] = {'C', 'B', 'E', 'P', 'Q', 'D', 'L', 'M', '0'};
-const String CMD_MEANINGS[9] = {"Cycle", "Scores", "Error", "Pow Set", "Pow Msg", "Cycle Done", "Light Set", "Light Msg", "Resend"};
+const int NUM_CMDS = 10;
+const char CMD_CODES[10] = {'C', 'B', 'E', 'P', 'Q', 'D', 'L', 'M', '0', '1'};
+const String CMD_MEANINGS[10] = {"Cycle", "Scores", "Error", "Pow Set", "Pow Msg", "Cycle Done", "Light Set", "Light Msg", "Resend", "Verify Connection"};
 		
 class ConnectScoring
 {
@@ -30,18 +30,17 @@ class ConnectScoring
 		void sendCmd(String cmd);
 		void doLastCmd();
 		void sendScore(boolean pins[]);
-		int sendScoreCycle(boolean pins[]);
 		void doResend();
 		String readSerial();
 		void genTestScoring();
-		int genTestScoringCycle();
+		boolean isConnected();
     
 	private:
 		String lastCmd;
 		int numFailedAttempts;
-    
 		boolean verifyCmd(String cmd);
 		char genHash(String cmd);
 		boolean isRealCmd(String cmd);
+		String readSerialUntilCommandReceived();
 };
 #endif
